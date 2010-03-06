@@ -4,6 +4,25 @@ load('../src/function.js');
 new SimpleTestSuite(function(test){
   
   // Object Tests
+  
+  // regression tests
+  test('Object() and new Object returns a new {}', function(){
+    return typeof Object() === 'object' && typeof (new Object) === 'object' ;
+  });
+  
+  test('Object("a") returns {0:"a"}', function(){
+    a = Object("a");
+    return (
+      a[0] === 'a' &&
+      a.valueOf() === 'a'
+    );
+  });
+  
+  test('Object("123") returns {} with a valueOf 123', function(){
+    return Object.$super.call(this, 123).valueOf() === 123;
+  });
+  
+  
   test('Object.extend extends arg1 with properties of the following arguments', function(){
     var a = {a:'a'}, b = {b:'b'}, c = {c:'c'}, d = {d:'d'};
     Object.extend(a, b, c, d);
@@ -28,8 +47,6 @@ new SimpleTestSuite(function(test){
   test('new Object(object1, object2) extends new object with additional arguments', function(){
     return new Object({}, {foo:'bar'}).foo === 'bar';
   });
-  
-
   
   // Function Tests
   test('new Function takes an options arguments as it\'s last arg and sets prototype to it', function(){
@@ -56,4 +73,7 @@ new SimpleTestSuite(function(test){
 });
 
 
+
+var b = {b:'b'}, c = {c:'c'}, d = {d:'d'};
+var a = Object.extend({a:'a'}, b, c, d);
 

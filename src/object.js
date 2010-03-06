@@ -2,14 +2,20 @@
 ;(function(global) {
 
   function Object(){
-    var new_object = this;
-    if (typeof arguments[0] !== "undefined"){
-      new_object = new (new Function(arguments[0]));
-      Array.prototype.shift.apply(arguments);
-      Object.extend.apply(new_object, arguments);
+    var object;
+    if (arguments.length === 0){
+      object = Object.$super.call(global);
+    }else{
+      object = Object.$super.call(global, arguments[0]);
+      if (object.valueOf() === object){
+        object = new (new Function(object));
+        Array.prototype.shift.apply(arguments);
+        Object.extend.apply(object, arguments);
+      }
     }
-    return new_object;
+    return object;
   }
+  Object.$super = global.Object;
 
   for (var p in global.Object) Object[p] = global.Object[p];
   Object.prototype = global.Object.prototype;
